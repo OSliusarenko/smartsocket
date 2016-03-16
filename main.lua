@@ -7,6 +7,9 @@ tmr.alarm(0, 1000, 1, function()
     end
 end)
 sstate = false
+gpio.mode(4, gpio.OUTPUT)
+gpio.write(4, gpio.HIGH)
+
 srv=net.createServer(net.TCP)
 srv:listen(80, function(conn)
     conn:on("receive", function(conn,payload)
@@ -15,8 +18,10 @@ srv:listen(80, function(conn)
     if pstate~=nil then
         if pstate=="0" then
             sstate = false
+            gpio.write(4, gpio.LOW)
         else
             sstate = true
+            gpio.write(4, gpio.HIGH)
         end
     end
     if file.open("tmpl.html", "r")~=nil then
